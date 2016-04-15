@@ -1,6 +1,5 @@
 package lintcode;
 
-import hihoCoder.charRemove;
 
 public class RotateString {
 
