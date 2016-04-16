@@ -40,7 +40,7 @@ public class bubbleTest {
 	}
 	
 	@Test
-	public void testBubbleSort3() {
+	public void testQuickSort() {
 		int[] sortnum = {1,2,3,4,5,6,7,8,9,10};
 		int[] num = {10,8,1,3,2,4,7,6,5,9};
 		bubble busort = new bubble();
@@ -50,16 +50,43 @@ public class bubbleTest {
 		}
 	}
 	
-//	@Test
-//	public void testBubbleSort4() {
-//		int[] sortnum = {1,2,3,4,5,6,7,8,9,10};
-//		int[] num = {10,8,1,3,2,4,7,6,5,9};
-//		bubble busort = new bubble();
-//		int[] numsorted = busort.quickSort(num);
-//		for(int i = 0; i < sortnum.length; i++){
-//			assertEquals(sortnum[i], numsorted[i]);
-//		}
-//	}
+	@Test
+	public void testSelectSort() {
+		int[] sortnum = {1,2,3,4,5,6,7,8,9,10};
+		int[] num = {10,8,1,3,2,4,7,6,5,9};
+		bubble busort = new bubble();
+		int[] numsorted = busort.selectSort(num);
+		for(int i = 0; i < sortnum.length; i++){
+			assertEquals(sortnum[i], numsorted[i]);
+		}
+	}
 	
+	@Test
+	public void testInsertSort() {
+		int[] sortnum = {1,2,3,4,5,6,7,8,9,10};
+		int[] num = {10,8,1,3,2,4,7,6,5,9};
+		bubble busort = new bubble();
+		int[] numsorted = busort.insertSort(num);
+		for(int i = 0; i < numsorted.length;i++){
+			System.out.println(numsorted[i]);
+		}
+		for(int i = 0; i < sortnum.length; i++){
+			assertEquals(sortnum[i], numsorted[i]);
+		}
+	}
+	
+	@Test
+	public void testShellSort() {
+		int[] sortnum = {1,2,3,4,5,6,7,8,9,10};
+		int[] num = {10,8,1,3,2,4,7,6,5,9};
+		bubble busort = new bubble();
+		int[] numsorted = busort.shellSort(num);
+//		for(int i = 0; i < numsorted.length;i++){
+//			System.out.println(numsorted[i]);
+//		}
+		for(int i = 0; i < sortnum.length; i++){
+			assertEquals(sortnum[i], numsorted[i]);
+		}
+	}
 
 }

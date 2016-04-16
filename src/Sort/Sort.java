@@ -7,6 +7,10 @@ public interface Sort {
 	public int[] insertSort(int[] num);
 	public int[] heapSort(int[] num);
 	public int[] countSort(int[] num);
+	public int[] selectSort(int[] num);
+	public int[] radixSort(int[] num);
+	public int[] bucketSort(int[] num);
+	public int[] mergeSort(int[] num);
 	
 	
 }
