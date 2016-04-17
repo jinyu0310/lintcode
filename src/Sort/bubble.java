@@ -1,5 +1,11 @@
 package Sort;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
+import mogujie.first;
+
 public class bubble implements Sort{
 
 	
@@ -140,12 +146,123 @@ public class bubble implements Sort{
 	@Override
 	public int[] heapSort(int[] num) {
 		// TODO Auto-generated method stub
-		return null;
+		createMaxHeap(num);//建立最大堆
+		int length = num.length;
+		for(int i = length - 1; i > 0 ; i--){
+			swap(num, 0, i);
+			heapModify(num, i); //最大堆调整
+		}
+		return num;
 	}
+	
+	//堆的大小是奇数还是偶数，调整方式应该是不一样的
+	//创建最大堆。调整到上一层是需要和子节点比较的！！while循环？
+	//好像也没有考虑长度小于3时的情况
+	public void createMaxHeap(int[] num){
+		int length = num.length;
+		int oddOrEven = length%2;
+		if(oddOrEven == 1){
+			createMaxHeapFull(num,length);
+		}else{
+			int fatherpos = Math.floorDiv(length-1,2);
+			if(num[length-1] > num[fatherpos]){
+				swap(num, length-1, fatherpos);
+			}
+			createMaxHeapFull(num,length-1);
+		}		
+	}
+	//所有节点的度都为2时，创建最大堆
+	public void createMaxHeapFull(int[] num,int length){
+		int childmax = 0;
+		int fatherpos = 0;
+		for(int i = length - 1; i > 1; i -= 2){
+			int child = i;
+			do{
+				if(num[child] > num[child-1]){
+					childmax = child;
+				}else{
+					childmax = child-1;
+				}
+				fatherpos = Math.floorDiv(childmax-1,2);
+				if(num[childmax] > num[fatherpos]){
+					swap(num, childmax, fatherpos);
+				}
+				child = (childmax+1)*2; //最大子节点继续调整，小的子节点没有动过！
+			}while(child < length);
+		}
+	}
+	//从头结点开始最大堆调整，创建最大堆中的do while 循环中的内容
+	//最大堆调整是只有根节点不满足最大堆条件时对根节点的调整，进而可以实现插入元素
+	//考虑元素数小于3时，右子节点不存在，下标越界
+	public void heapModify(int[] num, int length){
+		if(length == 1){
+			return;
+		}
+		if(length == 2){
+			if(num[0] < num[1]){
+				swap(num, 0, 1);
+				return;
+			}else{
+				return;
+			}
+		}
+		int fatherpos = 0;
+		int child = (fatherpos+1)*2; //只有两个节点时就错了
+		int childmax = 0;
+		do{
+			if(num[child] > num[child-1]){
+				childmax = child;
+			}else{
+				childmax = child-1;
+			}
+			fatherpos = Math.floorDiv(childmax-1,2);
+			if(num[childmax] > num[fatherpos]){
+				swap(num, childmax, fatherpos);
+			}
+			child = (childmax+1)*2; //最大子节点继续调整，小的子节点没有动过！
+		}while(child < length);	
+	}
+	
+	
 	@Override
 	public int[] countSort(int[] num) {
 		// TODO Auto-generated method stub
-		return null;
+		int length = num.length;
+		int[] num2 = new int[length];
+		int min = num[0],max = num[0];
+		for(int i = 0; i < length; i++){
+			if(num[i] < min){
+				min = num[i];
+			}else if(num[i] > max){
+				max = num[i];
+			}
+		}
+		int[] utilNum = new int[max];
+		for(int i = 0; i < length; i++){
+//			System.out.println(num[i]);
+			utilNum[num[i]-1]++;
+		}
+		for(int i = 1; i < utilNum.length;i++){
+			utilNum[i] = utilNum[i] + utilNum[i-1];
+		}
+		for(int i = length-1; i >= 0; i--){
+//			System.out.println(num[i]);
+//			System.out.println(utilNum[num[i]-1]);
+			num2[utilNum[num[i]-1]-1] = num[i];
+			utilNum[num[i]-1]--;
+//			System.out.println(utilNum[num[i]-1]);
+		}
+		//这种实现方式元素都打乱了，谈不上稳定不稳定了吧！！
+//		int index = 0;
+//		for(int i = 0; i < utilNum.length;i++){
+//			while(utilNum[i] > 0){
+//				num[index] = i;
+//				utilNum[i]--;
+//				index++;
+//			}
+//		}
+		
+		return num2;
 	}
 
 	public void swap(int[] num, int i, int j){
@@ -174,14 +291,86 @@ public class bubble implements Sort{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	//桶的个数如何确定？
 	@Override
 	public int[] bucketSort(int[] num) {
 		// TODO Auto-generated method stub
-		return null;
+		int length = num.length;
+		int min = num[0],max = num[0];
+		for(int i = 0; i < length; i++){
+			if(num[i] < min){
+				min = num[i];
+			}else if(num[i] > max){
+				max = num[i];
+			}
+		}
+		int bucketnum = length/3;
+		//本来每个桶里插入应该是要用链表实现的
+		ArrayList[] bucket = new ArrayList[bucketnum];
+		for(int i = 0; i < length; i++){
+			if(bucket[num[i]/bucketnum] == null){
+				ArrayList<Integer> numi = new ArrayList<Integer>();
+				numi.add(num[i]);
+				bucket[num[i]/bucketnum] = numi;
+			}else{
+				bucket[num[i]/bucketnum].add(num[i]);
+			}
+		}
+		ArrayList<Integer> sortednum = new ArrayList<Integer>();
+		for(int i = 0; i < bucketnum;i++){
+			Collections.sort(bucket[i]);
+			Iterator<Integer> it = bucket[i].iterator();
+			while(it.hasNext()){
+				sortednum.add(it.next());
+			}
+		}
+		Integer[] sortedn = (Integer[])sortednum.toArray(new Integer[length]);
+		for(int i = 0; i < length;i++){
+			num[i] = sortedn[i];
+		}
+		
+		return num;
 	}
 	@Override
 	public int[] mergeSort(int[] num) {
 		// TODO Auto-generated method stub
-		return null;
+		int length = num.length;
+		merge(num, 0, length);
+		return num;
+	}
+	
+	//有点不太对，怎么好几次调用顺序没有变化，最后忽然就正确排序了！！
+	//这个归并排序实现的绝对不对！！
+	private int flag = 0;
+	public void merge(int[] num, int left, int right){
+		if(left >= right - 1){
+			return;
+		}
+		int mid = left + (right - left)/2;
+		merge(num, left, mid);
+		merge(num, mid+1, right);
+		insertSort2(num, left, right);
+//		System.out.println("第"+flag+"次调用");
+//		flag++;
+//		for(int i = 0; i < num.length;i++){
+//			System.out.println(num[i]);
+//		}
+	}
+	public void insertSort2(int[] num,int left,int right) {
+		// TODO Auto-generated method stub
+		for(int i = left+1;i < right;i++){
+			int temp = num[i];
+			int place = left;
+			for(int j = i; j > (1-1); j -= 1 ){
+				if(temp < num[j-1]){
+					num[j] = num[j-1];
+				}else{
+					place = j;
+					break;
+				}
+			}
+			num[place] = temp;
+		}
 	}
 }
