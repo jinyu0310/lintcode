@@ -2,6 +2,7 @@ package datastructure;
 
 public class myList {
     public ListNode head; 
+    public ListNode tail;
     
     public myList() { 
         this.head = new ListNode(0); 
@@ -22,5 +23,6 @@ public class myList {
     		phead = phead.next;
     	}
         phead.next = new ListNode(val); 
+        this.tail = phead.next;
     } 
 }

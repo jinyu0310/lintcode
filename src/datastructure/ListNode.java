@@ -1,5 +1,6 @@
 package datastructure;
 
+
 public class ListNode {
 	public int val;
 	public ListNode next;
@@ -13,6 +14,8 @@ public class ListNode {
 	
 	
 	public boolean hasNext() { 
+	    
 	    return this.next != null; 
+	    
 	} 
 }
