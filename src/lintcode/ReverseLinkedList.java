@@ -15,6 +15,7 @@ public class ReverseLinkedList {
      * @param head: The head of linked list.
      * @return: The new head of reversed linked list.
      */
+	//ÓÃ¸¨ÖúÕ»
     public static ListNode reverse(ListNode head) {
     	if(head == null){
     		return head;
